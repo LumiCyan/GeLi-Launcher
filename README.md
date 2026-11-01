@@ -16,11 +16,11 @@
 |---|---|
 | ![home](docs/screenshots/01-home.png) | ![download](docs/screenshots/02-download.png) |
 
-| 内容管理（读取模组自带图标） | 版本管理（草方块 / 织线 / 铁砧） |
+| 内容管理（读取模组自带图标） | 版本管理 |
 |---|---|
 | ![content](docs/screenshots/03-content.png) | ![versions](docs/screenshots/04-versions.png) |
 
-| 暗色模式 | 兼容渲染（远控 / 虚拟显卡） |
+| 暗色模式 | 兼容渲染 |
 |---|---|
 | ![dark](docs/screenshots/05-dark.png) | ![soft](docs/screenshots/06-software-render.png) |
 
@@ -61,7 +61,6 @@
 
 ### 可靠性与体验
 
-- **远控适配**：检测到远程会话（向日葵 / 远程桌面）自动切软件渲染，避免"进程在跑但画面全黑"
 - **单实例**：重复双击把已有窗口叫到前台，不再叠一堆
 - **启动前自检**：补齐缺失的库 / 资源 / natives，Fabric API 装错版本会自动替换
 - 崩溃后读 `crash-report` 给出人话解释
