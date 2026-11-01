@@ -1,6 +1,6 @@
 # GeLi Launcher
 
-一个用 **WPF / .NET 8** 写的 Minecraft 启动器，界面走「米白纸感 + 单一点缀色」的路子，功能上对齐 PCL 的常用部分：版本与加载器管理、Modrinth 资源下载、整合包导入、多账号与皮肤。
+一个用 **WPF / .NET 8** 写的 Minecraft 启动器
 
 > A lightweight Minecraft launcher built with WPF (.NET 8). Windows only.
 
