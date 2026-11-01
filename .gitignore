@@ -1,0 +1,23 @@
+## Build / 构建产物
+bin/
+obj/
+dist/
+dist-*/
+publish/
+*.user
+*.suo
+.vs/
+
+## 运行期数据（绝不能提交）
+GLL/
+.minecraft/
+*.log
+
+## 系统
+Thumbs.db
+desktop.ini
+.DS_Store
+
+## 截图草稿
+/shot-*.png
+/t-*.png

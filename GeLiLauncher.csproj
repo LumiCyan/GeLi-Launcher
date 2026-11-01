@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>GeLiLauncher</AssemblyName>
+    <RootNamespace>GeLiLauncher</RootNamespace>
+    <ApplicationIcon>Assets\gll.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>2.0.0</Version>
+    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <Product>GeLi Launcher</Product>
+    <AssemblyTitle>GeLi Launcher</AssemblyTitle>
+    <Company>gelibot</Company>
+    <Copyright>© 2026 gelibot</Copyright>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <DebugType>none</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <!-- 不能开 InvariantGlobalization：WPF 的字体语言缓存（MajorLanguages）依赖它，
+         开了会在首页排版时抛 TypeInitializationException，随后连锁出一堆 Dispatcher 异常 -->
+    <!-- 别把包里的 XML 文档复制进发布目录 -->
+    <AllowedReferenceRelatedFileExtensions>none</AllowedReferenceRelatedFileExtensions>
+    <!-- 明确不做 ReadyToRun（单文件压缩后更小） -->
+    <PublishReadyToRun>false</PublishReadyToRun>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Resource Include="Assets\gll.ico" />
+  </ItemGroup>
+
+  <!-- test/ 是独立的测试工程，不能被主工程一起编译 -->
+  <ItemGroup>
+    <Compile Remove="test\**" />
+    <Page Remove="test\**" />
+    <ApplicationDefinition Remove="test\**" />
+    <Resource Remove="test\**" />
+    <None Remove="test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4314.35" />
+  </ItemGroup>
+
+</Project>

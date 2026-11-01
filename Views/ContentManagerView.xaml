@@ -1,0 +1,93 @@
+<UserControl x:Class="GeLiLauncher.Views.ContentManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Resources>
+        <!-- 分类胶囊 -->
+        <Style x:Key="Chip" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{DynamicResource Sub}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bd" CornerRadius="9" Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource SoftBg}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource AccentLine}" />
+                                <Setter Property="Foreground" Value="{DynamicResource AccentDark}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <Grid Margin="2,0,2,12">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="← 返回" Style="{StaticResource BtnGhost}" Padding="8,5" FontSize="12.5"
+                        Click="OnBack" />
+                <TextBlock Text="内容管理" Style="{StaticResource H1}" FontSize="21" Margin="10,0,0,0" />
+            </StackPanel>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource Badge}"
+                    Background="{DynamicResource SoftBg}" Padding="10,4">
+                <TextBlock x:Name="InstTag" Text="—" FontSize="11" Foreground="{DynamicResource Sub}" />
+            </Border>
+        </Grid>
+
+        <!-- 分类 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <RadioButton x:Name="TabMods" Style="{StaticResource Chip}" GroupName="cm" IsChecked="True"
+                         Content="模组" Checked="OnKindChanged" Tag="mods" />
+            <RadioButton x:Name="TabRes" Style="{StaticResource Chip}" GroupName="cm"
+                         Content="资源包" Checked="OnKindChanged" Tag="resourcepacks" />
+            <RadioButton x:Name="TabShader" Style="{StaticResource Chip}" GroupName="cm"
+                         Content="光影" Checked="OnKindChanged" Tag="shaderpacks" />
+            <RadioButton x:Name="TabSaves" Style="{StaticResource Chip}" GroupName="cm"
+                         Content="存档" Checked="OnKindChanged" Tag="saves" />
+        </StackPanel>
+
+        <!-- 工具条 -->
+        <Grid Grid.Row="2" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="打开文件夹" Style="{StaticResource BtnSoft}" Padding="14,6" FontSize="12"
+                        Click="OnOpenFolder" />
+                <Button Content="刷新" Style="{StaticResource BtnGhost}" Padding="12,6" FontSize="12"
+                        Margin="6,0,0,0" Click="OnRefresh" />
+                <Button x:Name="BtnCheckUpdate" Content="检查更新" Style="{StaticResource BtnGhost}"
+                        Padding="12,6" FontSize="12" Margin="6,0,0,0" Visibility="Collapsed"
+                        Click="OnCheckUpdates" />
+                <TextBlock x:Name="HintText" Style="{StaticResource Muted}" FontSize="10.5"
+                           VerticalAlignment="Center" Margin="12,0,0,0" />
+            </StackPanel>
+            <TextBlock x:Name="CountText" Style="{StaticResource Muted}" FontSize="10.5"
+                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+        </Grid>
+
+        <!-- 列表 -->
+        <Border Grid.Row="3" CornerRadius="14" Background="{DynamicResource CardBg}"
+                BorderBrush="{DynamicResource Line}" BorderThickness="1" Padding="6">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,4,0">
+                <StackPanel x:Name="ListHost" />
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

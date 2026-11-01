@@ -1,0 +1,347 @@
+<UserControl x:Class="GeLiLauncher.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer x:Name="RootScroll" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+        <StackPanel>
+            <TextBlock Text="设置" Style="{StaticResource H1}" FontSize="21" Margin="2,0,0,0" />
+            <TextBlock x:Name="ConfigNote" Text="配置保存在启动器的 GLL 文件夹，不会上传"
+                       Style="{DynamicResource Muted}" Margin="2,5,0,16" TextWrapping="Wrap" />
+
+            <!-- 游戏 -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="游戏" Style="{StaticResource H2}" />
+
+                    <TextBlock Text="游戏目录" FontSize="12.5" Margin="0,16,0,6" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="GameDirBox" Padding="10,8" />
+                        <Button Grid.Column="1" Content="浏览" Style="{StaticResource BtnSm}" Margin="8,0,0,0"
+                                Padding="14,8" Click="OnBrowseGameDir" />
+                    </Grid>
+                    <TextBlock x:Name="GameDirNote" Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0"
+                               TextWrapping="Wrap"
+                               Text="版本、依赖库、资源、各实例的存档和模组都放在这里。启动器自身的配置保存在程序目录的 GLL 文件夹，两者分开，换游戏目录不影响登录与设置。" />
+
+                    <Grid Margin="0,16,0,0">
+                        <StackPanel>
+                            <TextBlock Text="游戏内语言" FontSize="12.5" />
+                            <TextBlock Text="启动时自动写入 options.txt；「跟随系统」会按你的 Windows 显示语言自动选择"
+                                       Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,4,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ComboBox x:Name="GameLangBox" Width="200" HorizontalAlignment="Right" SelectedIndex="0">
+                            <ComboBoxItem Content="跟随系统" Tag="auto" />
+                            <ComboBoxItem Content="简体中文" Tag="zh_cn" />
+                            <ComboBoxItem Content="繁體中文" Tag="zh_tw" />
+                            <ComboBoxItem Content="English" Tag="en_us" />
+                            <ComboBoxItem Content="日本語" Tag="ja_jp" />
+                            <ComboBoxItem Content="한국어" Tag="ko_kr" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,16,0,0">
+                        <TextBlock Text="内存分配" FontSize="12.5" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Name="MemLabel" Text="4096 MB" FontSize="12.5" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" Foreground="{DynamicResource GreenDark}" />
+                        </StackPanel>
+                    </Grid>
+                    <Slider x:Name="MemSlider" Minimum="1024" Maximum="16384" TickFrequency="512" IsSnapToTickEnabled="True"
+                            Margin="0,8,0,0" ValueChanged="OnMemChanged" />
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="窗口宽度" FontSize="12.5" VerticalAlignment="Center" />
+                        <TextBox x:Name="WidthBox" Grid.Column="1" Width="80" Margin="10,0,0,0" Padding="8,6" />
+                        <TextBlock Grid.Column="2" Text="高度" FontSize="12.5" VerticalAlignment="Center" Margin="14,0,0,0" />
+                        <StackPanel Grid.Column="3" Orientation="Horizontal">
+                            <TextBox x:Name="HeightBox" Width="80" Margin="10,0,0,0" Padding="8,6" />
+                            <CheckBox x:Name="FullscreenBox" Content="全屏启动" Margin="16,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="自定义 JVM 参数" FontSize="12.5" Margin="0,18,0,6" />
+                    <TextBox x:Name="JvmBox" Padding="10,8" Height="62" TextWrapping="Wrap" AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto" />
+                    <TextBlock Text="留空则使用默认的 G1GC 参数；进阶选项，不确定就不要改"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- 启动选项 -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="启动选项" Style="{StaticResource H2}" />
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="默认版本隔离" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="IsolationBox2" Width="230" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="隔离所有版本" Tag="1" />
+                            <ComboBoxItem Content="不隔离（共用同一套存档与模组）" Tag="0" />
+                        </ComboBox>
+                    </Grid>
+                    <TextBlock Text="开启后每个版本用 .minecraft\instances\&lt;版本&gt; 下自己的 mods 与存档；切换时会询问是否把现有内容搬过去"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" TextWrapping="Wrap" />
+
+                    <TextBlock Text="游戏窗口标题" FontSize="12.5" Margin="0,14,0,6" />
+                    <TextBox x:Name="TitleBox" Padding="10,8" />
+
+                    <TextBlock Text="自定义信息" FontSize="12.5" Margin="0,14,0,6" />
+                    <TextBox x:Name="InfoBox" Padding="10,8" />
+                    <TextBlock Text="窗口标题留空时，会用「Minecraft 版本名 | 自定义信息」作为标题"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" />
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="启动器可见性" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="AfterLaunchBox" Width="230" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="游戏启动后保持不变" Tag="none" />
+                            <ComboBoxItem Content="游戏启动后最小化启动器" Tag="minimize" />
+                            <ComboBoxItem Content="游戏启动后关闭启动器" Tag="close" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,12,0,0">
+                        <TextBlock Text="进程优先级" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="PriorityBox" Width="230" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="高" Tag="high" />
+                            <ComboBoxItem Content="高于正常" Tag="abovenormal" />
+                            <ComboBoxItem Content="中（正常）" Tag="normal" />
+                            <ComboBoxItem Content="低于正常" Tag="belownormal" />
+                            <ComboBoxItem Content="低" Tag="idle" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,12,0,0">
+                        <TextBlock Text="窗口大小" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="SizeBox" Width="230" HorizontalAlignment="Right" SelectionChanged="OnSizePresetChanged">
+                            <ComboBoxItem Content="默认（854 × 480）" Tag="854x480" />
+                            <ComboBoxItem Content="1280 × 720" Tag="1280x720" />
+                            <ComboBoxItem Content="1920 × 1080" Tag="1920x1080" />
+                            <ComboBoxItem Content="全屏" Tag="full" />
+                            <ComboBoxItem Content="自定义（用上面的宽高）" Tag="custom" />
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 个性化 -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="主题" Style="{StaticResource H2}" />
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="模式" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="ThemeModeBox" Width="230" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="浅色（白）" Tag="light" />
+                            <ComboBoxItem Content="暗色（近黑）" Tag="dark" />
+                        </ComboBox>
+                    </Grid>
+
+                    <TextBlock Text="点缀色" FontSize="12.5" Margin="0,16,0,8" />
+                    <WrapPanel x:Name="AccentPanel" />
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="AccentBox" Padding="10,8" MaxLength="7" />
+                        <Button Grid.Column="1" Content="应用" Style="{StaticResource BtnSm}" Margin="8,0,0,0"
+                                Padding="16,8" Click="OnApplyAccent" />
+                    </Grid>
+
+
+                    <TextBlock Text="默认 #66CCFF。切换模式会重建界面，游戏运行中请先退出游戏。"
+                               Style="{StaticResource Muted}" FontSize="10.5" Margin="0,6,0,0" TextWrapping="Wrap" />
+
+                    <!-- 玻璃透明度：拖动即时预览 -->
+                    <Grid Margin="0,18,0,0">
+                        <TextBlock Text="玻璃透明度" FontSize="12.5" VerticalAlignment="Center" />
+                        <TextBlock x:Name="GlassNote" Text="0%" Style="{DynamicResource Muted}" FontSize="11"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+                    <Slider x:Name="GlassSlider" Minimum="0" Maximum="80" TickFrequency="5" IsSnapToTickEnabled="True"
+                            Margin="0,6,0,0" ValueChanged="OnGlassChanged" />
+                    <TextBlock Text="调大后卡片和按钮更透，能透出身后的背景图；0 为现在的观感，建议 0~50"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" TextWrapping="Wrap" />
+
+                    <Border Height="1" Background="{DynamicResource Line}" Margin="0,18,0,16" />
+
+                    <TextBlock Text="背景图片（1 张）" Style="{StaticResource H2}" />
+                    <TextBlock x:Name="BgNote" Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0"
+                               TextWrapping="Wrap" Text="把图片放进 GLL\background 文件夹，启动器会自动使用第一张" />
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="自适应方式" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="BgStretchBox" Width="230" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="自动（铺满裁切）" Tag="auto" />
+                            <ComboBoxItem Content="填充" Tag="fill" />
+                            <ComboBoxItem Content="适应（完整显示）" Tag="fit" />
+                            <ComboBoxItem Content="拉伸" Tag="stretch" />
+                            <ComboBoxItem Content="原始大小" Tag="tile" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="不透明度" FontSize="12.5" VerticalAlignment="Center" />
+                        <TextBlock x:Name="BgOpacityLabel" Text="100%" FontSize="12" FontWeight="SemiBold"
+                                   HorizontalAlignment="Right" Foreground="{DynamicResource GreenDark}" />
+                    </Grid>
+                    <Slider x:Name="BgOpacitySlider" Minimum="0" Maximum="100" TickFrequency="5" IsSnapToTickEnabled="True"
+                            Margin="0,6,0,0" ValueChanged="OnBgOpacityChanged" />
+
+                    <Grid Margin="0,10,0,0">
+                        <TextBlock Text="背景模糊" FontSize="12.5" VerticalAlignment="Center" />
+                        <TextBlock x:Name="BgBlurLabel" Text="0" FontSize="12" FontWeight="SemiBold"
+                                   HorizontalAlignment="Right" Foreground="{DynamicResource GreenDark}" />
+                    </Grid>
+                    <Slider x:Name="BgBlurSlider" Minimum="0" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True"
+                            Margin="0,6,0,0" ValueChanged="OnBgBlurChanged" />
+
+                    <CheckBox x:Name="BgTintBox" Content="叠加强色背景（让文字更清晰）" Margin="0,12,0,0" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="打开文件夹" Style="{StaticResource BtnSm}" Padding="14,7" Click="OnOpenBgFolder" />
+                        <Button Content="刷新背景图片" Style="{StaticResource BtnSoft}" Padding="14,7" Margin="8,0,0,0" Click="OnRefreshBg" />
+                        <Button Content="清空背景图片" Style="{StaticResource BtnDanger}" Padding="14,7" Margin="8,0,0,0" Click="OnClearBg" />
+                    </StackPanel>
+
+                    <TextBlock Text="背景音乐" Style="{StaticResource H2}" Margin="0,20,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button Content="打开文件夹" Style="{StaticResource BtnSm}" Padding="14,7" Click="OnOpenMusicFolder" />
+                        <Button Content="刷新背景音乐" Style="{StaticResource BtnSoft}" Padding="14,7" Margin="8,0,0,0" Click="OnRefreshMusic" />
+                        <CheckBox x:Name="BgMusicBox" Content="播放背景音乐" VerticalAlignment="Center" Margin="14,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- 下载 -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="下载与来源" Style="{StaticResource H2}" />
+
+                    <Grid Margin="0,14,0,0">
+                        <StackPanel>
+                            <TextBlock Text="游戏文件下载源" FontSize="12.5" />
+                            <TextBlock Text="镜像只做加速，文件仍按官方 SHA1 校验，损坏会自动回退官方"
+                                       Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="SourceBox" Width="240" HorizontalAlignment="Right" SelectedIndex="0">
+                            <ComboBoxItem Content="自动（测速选择最快）" Tag="auto" />
+                            <ComboBoxItem Content="国内镜像 BMCLAPI" Tag="bmclapi" />
+                            <ComboBoxItem Content="Mojang 官方源" Tag="official" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Margin="0,18,0,0">
+                        <StackPanel>
+                            <TextBlock Text="模组搜索来源" FontSize="12.5" />
+                            <TextBlock Text="CurseForge 官方接口需要 API Key，没有时自动走开放通道"
+                                       Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="ModSourceBox" Width="240" HorizontalAlignment="Right" SelectedIndex="0">
+                            <ComboBoxItem Content="自动（多源聚合）" Tag="auto" />
+                            <ComboBoxItem Content="仅 Modrinth" Tag="modrinth" />
+                            <ComboBoxItem Content="仅 CurseForge" Tag="curseforge" />
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Java -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Java 运行时" Style="{StaticResource H2}" />
+                    <TextBlock x:Name="JavaStatus" Text="检测中…" Style="{DynamicResource Muted}" Margin="0,8,0,0"
+                               TextWrapping="Wrap" />
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="JavaBox" Padding="10,8" />
+                        <Button Grid.Column="1" Content="浏览" Style="{StaticResource BtnSm}" Margin="8,0,0,0"
+                                Padding="14,8" Click="OnBrowseJava" />
+                        <Button Grid.Column="2" Content="重新检测" Style="{StaticResource BtnSoft}" Margin="6,0,0,0"
+                                Padding="14,8" Click="OnRedetectJava" />
+                        <Button Grid.Column="3" Content="安装 Java 21" Style="{StaticResource BtnBlue}" Margin="6,0,0,0"
+                                Padding="14,8" Click="OnInstallJava" />
+                    </Grid>
+                    <TextBlock Text="留空则自动查找：启动器自带运行时 → JAVA_HOME → 系统 PATH → Program Files"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,8,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- 其他 -->
+            <Border Style="{StaticResource GlassCard}" Padding="20,18" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="其他" Style="{StaticResource H2}" />
+
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="检测到的 Java" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="JavaPickBox" Width="230" HorizontalAlignment="Right"
+                                  SelectionChanged="OnJavaPicked" />
+                    </Grid>
+                    <TextBlock Text="点一下可以直接切换，也会显示每个 Java 的版本和来源"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" />
+
+                    <Button Content="创建桌面快捷方式" Style="{StaticResource BtnSoft}" Padding="14,7"
+                            Margin="0,14,0,0" HorizontalAlignment="Left" Click="OnCreateShortcut" />
+
+                    <CheckBox x:Name="AutoBackupBox" Content="启动游戏前自动备份存档" Margin="0,16,0,0" />
+                    <Grid Margin="0,10,0,0">
+                        <TextBlock Text="自动备份保留份数" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="BackupKeepBox" Width="120" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="3 份" Tag="3" />
+                            <ComboBoxItem Content="5 份" Tag="5" />
+                            <ComboBoxItem Content="10 份" Tag="10" />
+                            <ComboBoxItem Content="20 份" Tag="20" />
+                        </ComboBox>
+                    </Grid>
+                    <Grid Margin="0,14,0,0">
+                        <TextBlock Text="滚轮速度" FontSize="12.5" VerticalAlignment="Center" />
+                        <ComboBox x:Name="ScrollSpeedBox" Width="200" HorizontalAlignment="Right">
+                            <ComboBoxItem Content="慢（一格约 43px）" Tag="1" />
+                            <ComboBoxItem Content="标准（一格约 62px）" Tag="2" />
+                            <ComboBoxItem Content="快（一格约 102px）" Tag="3" />
+                        </ComboBox>
+                    </Grid>
+                    <TextBlock Text="觉得列表滚得太快就调成「慢」，保存后立刻生效"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" TextWrapping="Wrap" />
+
+                    <CheckBox x:Name="CrashBox" Content="退出时提示异常信息" Margin="0,14,0,0" />
+
+                    <CheckBox x:Name="SoftwareRenderBox" Content="兼容渲染（远控 / 虚拟显卡下窗口全黑时勾选）" Margin="0,12,0,0" />
+                    <TextBlock Text="用向日葵、远程桌面连过来时，如果启动后看不到窗口（任务栏有图标但画面全黑），勾上这里再重启启动器。平常用不到。"
+                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,6,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- 关于 -->
+            <Border Style="{StaticResource Card}" Padding="20,18" Background="{DynamicResource SoftBg}" Margin="0,0,0,6">
+                <Grid>
+                    <StackPanel>
+                        <TextBlock Text="GeLi Launcher 2.0" FontSize="12.5" FontWeight="SemiBold" />
+                        <TextBlock Text=".NET 8 · WPF · 仅使用官方接口，不包含任何破解或离线验证绕过"
+                                   Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,4,0,0" />
+                    </StackPanel>
+                    <TextBlock x:Name="SizeNote" Text="" Style="{DynamicResource Muted}" FontSize="10.5"
+                               HorizontalAlignment="Right" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <Button Content="保存设置" Style="{StaticResource BtnPrimary}" Padding="26,11" Margin="0,10,0,8"
+                    HorizontalAlignment="Left" Click="OnSave" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
