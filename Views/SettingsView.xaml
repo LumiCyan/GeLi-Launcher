@@ -277,8 +277,19 @@
                         <Button Grid.Column="3" Content="安装 Java 21" Style="{StaticResource BtnBlue}" Margin="6,0,0,0"
                                 Padding="14,8" Click="OnInstallJava" />
                     </Grid>
-                    <TextBlock Text="留空则自动查找：启动器自带运行时 → JAVA_HOME → 系统 PATH → Program Files"
-                               Style="{DynamicResource Muted}" FontSize="10.5" Margin="0,8,0,0" TextWrapping="Wrap" />
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="留空则自动查找：启动器自带运行时 → JAVA_HOME → PATH → 各盘 Program Files → IDE 自带 JBR → 其它启动器的 runtime → 注册表"
+                                   Style="{DynamicResource Muted}" FontSize="10.5" TextWrapping="Wrap"
+                                   VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <Button Grid.Column="1" x:Name="BtnDeepScan" Content="深度扫描硬盘"
+                                Style="{StaticResource BtnSoft}" Padding="12,5" FontSize="11"
+                                VerticalAlignment="Center" Click="OnDeepScan"
+                                ToolTip="在整块硬盘上找 java.exe（约 10-25 秒），找到的会记住" />
+                    </Grid>
                 </StackPanel>
             </Border>
 

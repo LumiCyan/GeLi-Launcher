@@ -74,7 +74,7 @@ namespace GeLiLauncher.Core
         public string loader { get; set; } = "vanilla";
         public string loaderVersion { get; set; } = "";
         public string dir { get; set; } = "";              // 所属游戏目录（多目录时用来区分）
-        public string javaPath { get; set; } = "";         // 版本级 Java，空 = 用全局设置
+        public string javaPath { get; set; } = "";
         public int mem { get; set; } = 0;                  // 版本级内存(MB)，0 = 用全局设置
         public string icon { get; set; } = "";             // 自定义版本图标（相对 GLL 目录，如 icons/xxx.png）
         public string kind { get; set; } = "";             // modpack = 由整合包安装出来的版本
@@ -87,6 +87,7 @@ namespace GeLiLauncher.Core
     public class Config
     {
         public string javaPath { get; set; } = "";
+        public List<string> extraJava { get; set; } = new List<string>();   // 深度扫描找到的 java.exe
         [JsonConverter(typeof(LenientIntConverter))]
         public int mem { get; set; } = 4096;
         public string jvm { get; set; } = "-XX:+UseG1GC -XX:MaxGCPauseMillis=50";
@@ -140,6 +141,7 @@ namespace GeLiLauncher.Core
             instances ??= new List<Instance>();
             hiddenVersions ??= new List<string>();
             gameDirs ??= new List<string>();
+            extraJava ??= new List<string>();
             if (string.IsNullOrWhiteSpace(downloadSource)) downloadSource = "auto";
             if (string.IsNullOrWhiteSpace(modSource)) modSource = "auto";
             if (string.IsNullOrWhiteSpace(gameLang)) gameLang = "auto";

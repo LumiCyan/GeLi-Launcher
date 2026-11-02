@@ -102,6 +102,7 @@ namespace GeLiLauncher
             if (Environment.GetEnvironmentVariable("GLL_SETTEST") == "1") { RunSetTest(); return; }
             if (Environment.GetEnvironmentVariable("GLL_CLICKTEST") == "1") { ReportClickTargets(); return; }
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GLL_AUTOINSTALL"))) { RunInstallTest(); return; }
+            if (Environment.GetEnvironmentVariable("GLL_JAVATEST") == "1") { RunJavaTest(); return; }
 
             var shot = Environment.GetEnvironmentVariable("GLL_SHOT");
             if (string.IsNullOrEmpty(shot)) return;
@@ -547,6 +548,33 @@ namespace GeLiLauncher
                 win.Show();
             }
             catch (Exception e) { Diag.Write(e, "CRASH TEST"); }
+        }
+
+        /// <summary>把所有能找到的 Java 打出来，验证扫描范围（GLL_JAVATEST=1）</summary>
+        async void RunJavaTest()
+        {
+            await Task.Delay(600);
+
+            var sw = Stopwatch.StartNew();
+            var cands = JavaRuntime.Candidates().ToList();
+            Diag.Write($"JAVATEST 候选 {cands.Count} 个，列举耗时 {sw.ElapsedMilliseconds}ms");
+
+            foreach (var c in cands)
+            {
+                var info = JavaRuntime.Probe(c);
+                Diag.Write($"  {(info == null ? "[无效]" : $"Java {info.Major} · {info.Vendor}")}  {c}");
+            }
+
+            sw.Restart();
+            var all = await Task.Run(() => JavaRuntime.ScanAll(true));
+            Diag.Write($"JAVATEST ScanAll → {all.Count} 个，耗时 {sw.ElapsedMilliseconds}ms");
+
+            sw.Restart();
+            var deep = await Task.Run(() => JavaRuntime.DeepScan(20000));
+            Diag.Write($"JAVATEST DeepScan → {deep.Count} 个，耗时 {sw.ElapsedMilliseconds}ms");
+            foreach (var d in deep) Diag.Write("  deep: " + d);
+
+            try { Application.Current.Shutdown(); } catch { }
         }
 
         /// <summary>

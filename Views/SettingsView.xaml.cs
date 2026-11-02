@@ -52,7 +52,7 @@ namespace GeLiLauncher.Views
             SelectTag(ScrollSpeedBox, (c.scrollSpeed > 0 ? c.scrollSpeed : 2).ToString());
             AutoBackupBox.IsChecked = c.autoBackupSaves;
             SelectTag(BackupKeepBox, (c.backupKeep > 0 ? c.backupKeep : 5).ToString());
-            LoadJavaList();
+            _ = LoadJavaList();
 
             // 启动选项
             IsolationBox2.SelectedIndex = c.isolation ? 0 : 1;
@@ -297,7 +297,7 @@ namespace GeLiLauncher.Views
         bool _fillingJava;
         bool _filling;
 
-        async void LoadJavaList()
+        async System.Threading.Tasks.Task LoadJavaList()
         {
             _fillingJava = true;
             try
@@ -389,6 +389,59 @@ namespace GeLiLauncher.Views
         }
 
         void OnRedetectJava(object sender, RoutedEventArgs e) => _ = DetectJavaAsync();
+
+        /// <summary>
+        /// 深度扫描：常规查找只看常见目录，装在 D 盘某个文件夹、或 IDE / 别的启动器带下来的
+        /// Java 会漏掉。这里在整块盘上找一遍，把找到的记进配置，以后启动就直接认得。
+        /// </summary>
+        async void OnDeepScan(object sender, RoutedEventArgs e)
+        {
+            if (BtnDeepScan == null || !BtnDeepScan.IsEnabled) return;
+
+            BtnDeepScan.IsEnabled = false;
+            var oldText = BtnDeepScan.Content;
+            BtnDeepScan.Content = "扫描中…";
+            _main.Toast("正在扫描硬盘，最多 25 秒");
+
+            try
+            {
+                var exes = await System.Threading.Tasks.Task.Run(() => JavaRuntime.DeepScan(25000));
+
+                // 每个都要起进程读版本，一起丢后台
+                var verified = await System.Threading.Tasks.Task.Run(() =>
+                {
+                    var ok = new List<string>();
+                    foreach (var exe in exes)
+                        if (JavaRuntime.Probe(exe) != null) ok.Add(exe);
+                    return ok;
+                });
+
+                var cfg = Gll.Cfg;
+                var added = 0;
+                foreach (var exe in verified)
+                {
+                    if (cfg.extraJava.Any(x => string.Equals(x, exe, StringComparison.OrdinalIgnoreCase))) continue;
+                    cfg.extraJava.Add(exe);
+                    added++;
+                }
+
+                if (added > 0) Gll.SaveConfig();
+
+                // 让 ScanAll 重新走一遍（Probe 有缓存，不会重复起进程）
+                await System.Threading.Tasks.Task.Run(() => JavaRuntime.ScanAll(true));
+                await LoadJavaList();
+
+                if (added > 0) _main.Toast($"找到 {added} 个新的 Java，已加入列表");
+                else if (verified.Count > 0) _main.Toast($"扫描到 {verified.Count} 个 Java，没有新的");
+                else _main.Toast("没找到额外的 Java", true);
+            }
+            catch (Exception ex) { _main.Toast("扫描失败：" + ex.Message, true); }
+            finally
+            {
+                BtnDeepScan.Content = oldText;
+                BtnDeepScan.IsEnabled = true;
+            }
+        }
 
         async void OnInstallJava(object sender, RoutedEventArgs e)
         {
