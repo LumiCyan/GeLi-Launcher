@@ -73,12 +73,12 @@
 
 Windows x64，自包含运行时（无需安装 .NET）：
 
-**[GeLiLauncher-2.0-win-x64.exe](https://github.com/LumiCyan/GeLi-Launcher/releases/download/v2.0.0/GeLiLauncher-2.0-win-x64.exe)** · 63.9 MB
+**[GeLiLauncher-2.0.1-win-x64.exe](https://github.com/LumiCyan/GeLi-Launcher/releases/download/v2.0.1/GeLiLauncher-2.0.1-win-x64.exe)** · 63.9 MB
 
 GitHub 下载慢可在链接前面加镜像前缀 `https://gh-proxy.com/`：
 
 ```
-https://gh-proxy.com/https://github.com/LumiCyan/GeLi-Launcher/releases/download/v2.0.0/GeLiLauncher-2.0-win-x64.exe
+https://gh-proxy.com/https://github.com/LumiCyan/GeLi-Launcher/releases/download/v2.0.1/GeLiLauncher-2.0.1-win-x64.exe
 ```
 
 版本说明见 [Releases](https://github.com/LumiCyan/GeLi-Launcher/releases)。
